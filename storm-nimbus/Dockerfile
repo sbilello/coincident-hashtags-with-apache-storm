@@ -33,17 +33,17 @@ RUN set -ex; \
     mkdir -p "$STORM_CONF_DIR" "$STORM_DATA_DIR" "$STORM_LOG_DIR"; \
     chown -R "$STORM_USER:$STORM_USER" "$STORM_CONF_DIR" "$STORM_DATA_DIR" "$STORM_LOG_DIR"``
 
-ARG DISTRO_NAME=apache-storm-1.2.1
+ARG DISTRO_NAME=apache-storm-0.9.2-incubating
 
 # Download Apache Storm.
 RUN set -ex; \
-    wget -q "http://www.apache.org/dist/storm/$DISTRO_NAME/$DISTRO_NAME.tar.gz"; \
+    wget -q "https://archive.apache.org/dist/storm/${DISTRO_NAME}/${DISTRO_NAME}.tar.gz"; \
     export GNUPGHOME="$(mktemp -d)"; \
-    tar -xzf "$DISTRO_NAME.tar.gz"; \
-    chown -R "$STORM_USER:$STORM_USER" "$DISTRO_NAME"; \
-    rm "$DISTRO_NAME.tar.gz";
+    tar -xzf "${DISTRO_NAME}.tar.gz"; \
+    chown -R "$STORM_USER:$STORM_USER" "${DISTRO_NAME}"; \
+    rm "${DISTRO_NAME}.tar.gz";
 
-ENV PATH $PATH:/$DISTRO_NAME/bin
+ENV PATH $PATH:/${DISTRO_NAME}/bin
 
 ADD storm.yaml /conf
 
