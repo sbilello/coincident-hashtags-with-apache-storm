@@ -43,9 +43,9 @@ RUN set -ex; \
     chown -R "$STORM_USER:$STORM_USER" "${DISTRO_NAME}"; \
     rm "${DISTRO_NAME}.tar.gz";
 
-ENV PATH $PATH:/${DISTRO_NAME}/bin
+ADD storm.yaml "${DISTRO_NAME}/conf/"
 
-ADD storm.yaml /conf
+ENV PATH $PATH:/${DISTRO_NAME}/bin
 
 RUN chown -R "$STORM_USER" "$STORM_CONF_DIR" "$STORM_DATA_DIR" "$STORM_LOG_DIR"
 

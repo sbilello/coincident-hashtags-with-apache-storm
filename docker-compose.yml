@@ -1,28 +1,49 @@
-version: '3.2'
+version: '3.1'
+
+networks:
+  app-tier:
+    driver: bridge
 
 services:
-    zookeeper:
-        build: ./zookeeper
-        # Keep it running.  
-        tty: true
-        
-    storm-nimbus:
-        build: ./storm-nimbus
-        links:
-            - zookeeper
-        tty: true
-        # To access the Storm UI from our host machine.  
-        ports:
-            - 8080:8080
-        volumes:
-            - './storm-nimbus:/theproject'
+   zookeeper:
+    image: zookeeper
+    container_name: zookeeper
+    networks:
+        - app-tier
+    restart: always
+    tty: true
 
-    storm-supervisor:
-        build: ./storm-supervisor
-        links:
-            - zookeeper
-            - storm-nimbus
-        tty: true
+   nimbus:
+    build: ./storm-nimbus
+    container_name: nimbus
+    command: storm nimbus
+    networks:
+        - app-tier
+    depends_on: 
+        - zookeeper
+    links:
+        - zookeeper
+    tty: true
+    # To access the Storm UI from our host machine.  
+    ports:
+        - 8080:8080
+        - 6627:6627
+    volumes:
+        - './storm-nimbus:/theproject'
+
+   supervisor:
+    build: ./storm-supervisor
+    container_name: supervisor
+    command: storm supervisor
+    networks:
+        - app-tier
+    depends_on: 
+        - nimbus
+        - zookeeper
+    links:
+        - zookeeper
+        - nimbus
+    tty: true
 
 # Host volume used to store our code on the master node (Nimbus).
 volumes:
