@@ -49,16 +49,15 @@ ENV PATH $PATH:/${DISTRO_NAME}/bin
 
 RUN chown -R "$STORM_USER" "$STORM_CONF_DIR" "$STORM_DATA_DIR" "$STORM_LOG_DIR"
 
-
 # Install Maven.
 
-ENV MAVEN_VERSION="3.5.3" \
+ENV MAVEN_VERSION="3.6.0" \
     M2_HOME=/usr/lib/mvn
 
 RUN cd /tmp && \
-    wget "http://www-us.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz" && \
-    tar -zxvf "apache-maven-$MAVEN_VERSION-bin.tar.gz" && \
-    mv "apache-maven-$MAVEN_VERSION" "$M2_HOME" && \
+    wget "http://apache.mirrors.hoobly.com/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.tar.gz" && \
+    tar -zxvf "apache-maven-3.6.0-bin.tar.gz" && \
+    mv "apache-maven-3.6.0" "$M2_HOME" && \
     ln -s "$M2_HOME/bin/mvn" /usr/bin/mvn && \
     rm -R /tmp/*
 
